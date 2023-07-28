@@ -1,1 +1,25 @@
+class Solution {
+public:
+  int f(int i,int j,vector<int>& nums,vector<vector<int>> &dp){
+      if(i>j) return 0; //base case 
 
+      if(dp[i][j]!=-1) return dp[i][j]; //memoization condition
+      
+      int take=nums[i]+min(f(i+2,j,nums,dp),f(i+1,j-1,nums,dp)); //minimizing player2 ka score  
+      int nottake=nums[j]+min(f(i+1,j-1,nums,dp),f(i,j-2,nums,dp));
+
+      return dp[i][j]=max(take,nottake); //maximizing player1 ka score 
+  }
+    bool PredictTheWinner(vector<int>& nums) {
+        int sum=0;
+        for(auto it:nums) sum+=it;  //finding total score 
+        int n=nums.size();
+        vector<vector<int>> dp(n,vector<int>(n,-1)); // dp vector
+
+        int p1=f(0,nums.size()-1,nums,dp); //finding player1 ka max score possible
+        int p2=sum-p1; //player2 ka score will be total sum - player1 ka score
+        
+        if(p1>=p2) return true;  
+        return false;
+    }
+};
